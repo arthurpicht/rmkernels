@@ -40,9 +40,9 @@ case "$1" in
 		;;
 	*)
 		echo "rmkernel. Remove old kernels. Usage:"
-		echo "1. Call 'rmkernel -determine' to create list of old kernel related packages."
+		echo "1. Call 'rmkernels -determine' to create list of old kernel related packages."
 		echo "2. Edit $OBSOLETE_KERNELS_FILE. Remove package names that should be kept untouched."
-		echo "3. Call 'rmkernel -exec' with super user privileges to remove selected kernel related packages."
+		echo "3. Call 'rmkernels -exec' with super user privileges to remove selected kernel related packages."
 		exit 1
 		;;
 esac
