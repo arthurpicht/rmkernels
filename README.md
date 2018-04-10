@@ -4,6 +4,7 @@ Simple bash script for selectively removing unused APT kernel packages. Tested f
 ## Installation
 
 Download *rmkernels* and copy it to */usr/local/sbin* or some other place on your path.
+Make it executable.
 
 ## Usage
 
