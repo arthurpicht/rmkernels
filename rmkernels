@@ -1,0 +1,49 @@
+#! /bin/bash
+
+###################################################################
+#
+# rmkernels
+#
+# Remove old kernels by purging related packages via apt.
+#
+# Tested for Ubuntu 16.04
+#
+# Location: /usr/local/sbin/
+#
+# Author: Arthur Picht, Düsseldorf, Germany
+# 
+###################################################################
+
+OBSOLETE_KERNELS_FILE=~/.obsoleteKernels
+
+case "$1" in
+	"-exec")
+		
+		if [ "$(id -u)" != "0" ]; then
+			echo "This option must be run with superuser privileges."
+			exit 1
+		fi
+
+		if [ ! -f $OBSOLETE_KERNELS_FILE ]; then
+			echo "No $OBSOLETE_KERNELS_FILE found. Please call 'rmkernel -determine'."
+			exit 1
+		fi
+
+		cat $OBSOLETE_KERNELS_FILE | xargs sudo apt-get -y purge
+		rm $OBSOLETE_KERNELS_FILE
+		echo "Old kernels successfully removed."
+		;;
+	"-determine")
+		apt-get --dry-run autoremove | grep -Po '^Remv \K[^ ]+' | grep -E '^linux-headers-|linux-image-' > $OBSOLETE_KERNELS_FILE
+		echo "File $OBSOLETE_KERNELS_FILE created as a list of obsolete kernels."
+		echo "Please check first, then call 'rmkernel -exec' for removing listed kernels'."
+		;;
+	*)
+		echo "rmkernel. Remove old kernels. Usage:"
+		echo "1. Call 'rmkernel -determine' to create list of old kernel related packages."
+		echo "2. Edit $OBSOLETE_KERNELS_FILE. Remove package names that should be kept untouched."
+		echo "3. Call 'rmkernel -exec' with super user privileges to remove selected kernel related packages."
+		exit 1
+		;;
+esac
+
